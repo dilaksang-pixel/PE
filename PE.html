@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Performance Review & Appraisal Form</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for the Inter font and a smooth background */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Lighter background */
+        }
+        /* Custom radio button appearance (Modern large circle) */
+        input[type="radio"] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            border: 3px solid #6366f1; /* Indigo 500 */
+            border-radius: 50%;
+            width: 1.5rem; /* Larger touch target */
+            height: 1.5rem;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        input[type="radio"]:hover {
+            border-color: #4f46e5; /* Indigo 600 */
+        }
+
+        input[type="radio"]:checked {
+            background-color: #4f46e5; /* Indigo 600 */
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 4px #e0e7ff; /* Indigo 100 ring for focus/checked */
+        }
+
+        /* Focus styles for inputs and textareas */
+        input:focus, textarea:focus {
+            border-color: #6366f1 !important;
+            box-shadow: 0 0 0 1px #6366f1, 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+            outline: none;
+        }
+
+        /* Styling for the calculation card */
+        #calculatedScoreContainer {
+            background: linear-gradient(135deg, #fef3c7, #fde68a); /* Light gradient for impact */
+            border-left: 6px solid #fbbf24; /* Amber border */
+        }
+
+        /* --- PRINT STYLING --- */
+        @media print {
+            /* General print cleanup */
+            body {
+                background-color: white !important;
+                padding: 0;
+                margin: 0;
+                box-shadow: none !important;
+            }
+            .max-w-5xl {
+                max-width: 100% !important;
+                box-shadow: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                border: none !important;
+            }
+            /* Hide elements not needed for printing */
+            #printButton, .print-hidden {
+                display: none !important;
+            }
+            /* Remove background from header and score card */
+            header {
+                background-color: #ccc !important; /* Light grey for header */
+                color: #000 !important;
+                border: 1px solid #000 !important;
+            }
+            #calculatedScoreContainer {
+                background: #eee !important;
+                border-left: 6px solid #aaa !important; 
+                box-shadow: none !important;
+            }
+            /* Simplify radio buttons for printing */
+            input[type="radio"] {
+                border: 1px solid #000 !important;
+                background-color: white !important;
+                width: 12px;
+                height: 12px;
+            }
+            input[type="radio"]:checked {
+                background-color: #000 !important;
+                box-shadow: none !important;
+            }
+            /* Text areas and inputs should show border */
+            input, textarea {
+                border: 1px solid #000 !important;
+            }
+            /* Force page break before section 4 (Development Action Plan) */
+            #pagebreak {
+                break-before: page;
+            }
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <!-- Print Button (Hidden in Print Mode) -->
+    <div id="printButton" class="max-w-5xl mx-auto mb-6">
+        <button onclick="window.print()" class="w-full md:w-auto px-6 py-3 bg-green-600 text-white font-bold rounded-lg shadow-md hover:bg-green-700 transition-all duration-300 flex items-center justify-center">
+            <!-- Icon from Lucide-React equivalent for print -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+            Print Evaluation (2 Pages)
+        </button>
+    </div>
+
+    <!-- Main Form Container -->
+    <div class="max-w-5xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden ring-1 ring-gray-100">
+        
+        <!-- Header Section -->
+        <header class="bg-indigo-600 p-8 text-white text-center rounded-t-3xl shadow-lg">
+            <h1 class="text-4xl font-extrabold tracking-tight">EMPLOYEE PERFORMANCE REVIEW & APPRAISAL</h1>
+            <h2 class="text-xl font-light opacity-90 mt-1">Melwire Rolling (Pvt) Ltd - Annual/Periodic Evaluation</h2>
+        </header>
+
+        <form class="p-6 md:p-12 space-y-12">
+
+            <!-- 1. Employee & Reviewer Information Section -->
+            <section class="border-b pb-8 border-gray-100">
+                <h3 class="text-2xl font-bold text-gray-800 mb-8 border-l-4 border-indigo-500 pl-4">1. Employee & Reviewer Information</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div>
+                        <label for="employeeName" class="block text-sm font-semibold text-gray-600 mb-1">Employee Name</label>
+                        <input type="text" id="employeeName" class="w-full rounded-lg border-gray-300 shadow-sm p-3 border focus:ring-indigo-500" placeholder="Full Name">
+                    </div>
+                    <div>
+                        <label for="employeeNo" class="block text-sm font-semibold text-gray-600 mb-1">Employee ID</label>
+                        <input type="text" id="employeeNo" class="w-full rounded-lg border-gray-300 shadow-sm p-3 border focus:ring-indigo-500" placeholder="ID Number">
+                    </div>
+                    <div>
+                        <label for="designation" class="block text-sm font-semibold text-gray-600 mb-1">Position/Title</label>
+                        <input type="text" id="designation" class="w-full rounded-lg border-gray-300 shadow-sm p-3 border focus:ring-indigo-500" placeholder="Job Title">
+                    </div>
+                    <div>
+                        <label for="division" class="block text-sm font-semibold text-gray-600 mb-1">Department</label>
+                        <input type="text" id="division" class="w-full rounded-lg border-gray-300 shadow-sm p-3 border focus:ring-indigo-500" placeholder="Department">
+                    </div>
+                    <div>
+                        <label for="reviewPeriod" class="block text-sm font-semibold text-gray-600 mb-1">Review Period</label>
+                        <input type="text" id="reviewPeriod" class="w-full rounded-lg border-gray-300 shadow-sm p-3 border focus:ring-indigo-500" value="01/01/2025 – 31/12/2025">
+                    </div>
+                    <div>
+                        <label for="reviewDate" class="block text-sm font-semibold text-gray-600 mb-1">Review Date</label>
+                        <input type="date" id="reviewDate" class="w-full rounded-lg border-gray-300 shadow-sm p-3 border focus:ring-indigo-500">
+                    </div>
+                    
+                    <div class="lg:col-span-2">
+                        <label for="reportingOfficer" class="block text-sm font-semibold text-gray-600 mb-1">Supervisor/Reviewer Name</label>
+                        <input type="text" id="reportingOfficer" class="w-full rounded-lg border-gray-300 shadow-sm p-3 border focus:ring-indigo-500" placeholder="Supervisor Name">
+                    </div>
+                    <div class="lg:col-span-2">
+                        <label for="supervisorTitle" class="block text-sm font-semibold text-gray-600 mb-1">Supervisor Title</label>
+                        <input type="text" id="supervisorTitle" class="w-full rounded-lg border-gray-300 shadow-sm p-3 border focus:ring-indigo-500" placeholder="Supervisor Title">
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Performance Evaluation Table -->
+            <section>
+                <h3 class="text-2xl font-bold text-gray-800 mb-8 border-l-4 border-indigo-500 pl-4">2. Performance Metrics & Rating</h3>
+                
+                <!-- Rating Scale Guide -->
+                <div class="mb-6 p-4 bg-indigo-50 border border-indigo-200 rounded-xl">
+                    <p class="font-medium text-indigo-800 mb-2">Rating Scale Guide:</p>
+                    <div class="flex flex-wrap gap-x-6 gap-y-2 text-sm text-indigo-700">
+                        <span class="font-bold">1: Unsatisfactory</span> 
+                        <span class="font-bold">2: Needs Improvement</span> 
+                        <span class="font-bold">3: Meets Expectations</span> 
+                        <span class="font-bold">4: Exceeds Expectations</span> 
+                        <span class="font-bold">5: Outstanding</span> 
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto shadow-xl rounded-xl">
+                    <table class="min-w-full divide-y divide-indigo-100">
+                        <thead class="bg-indigo-50 sticky top-0 z-10">
+                            <tr>
+                                <th scope="col" class="px-4 py-4 text-left text-xs font-extrabold text-indigo-700 uppercase tracking-wider w-1/4 min-w-[150px]">
+                                    Performance Factors
+                                </th>
+                                <th scope="col" colspan="5" class="px-1 py-4 text-center text-xs font-extrabold text-indigo-700 uppercase tracking-wider">
+                                    Rating (1-5)
+                                </th>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-extrabold text-indigo-700 uppercase tracking-wider w-1/3 min-w-[200px]">
+                                    Observations / Comments
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-100" id="ratingTableBody">
+                            
+                            <!-- JavaScript generates the rows here -->
+
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Overall Summary and Grading -->
+            <section class="pt-6 border-t border-gray-100">
+                <h3 class="text-2xl font-bold text-gray-800 mb-6 border-l-4 border-amber-500 pl-4">Overall Assessment</h3>
+
+                <!-- Calculated Score Display -->
+                <div id="calculatedScoreContainer" class="p-6 rounded-xl shadow-lg flex flex-col md:flex-row items-center justify-between transition-shadow duration-300">
+                    <div class="mb-4 md:mb-0">
+                        <p class="text-lg font-bold text-gray-800 tracking-wide">Overall Performance Score (Total Points)</p>
+                        <p class="text-sm text-gray-700">Calculated from all rated items: <span id="maxScoreDisplay">0 out of 130 points</span></p>
+                    </div>
+                    <div id="calculatedScore" class="text-5xl font-extrabold text-amber-700 transition-all duration-300">
+                        0.00%
+                    </div>
+                </div>
+
+                <!-- Overall Rating Categories -->
+                <div class="mt-8 p-6 bg-white rounded-xl shadow-md ring-1 ring-indigo-50">
+                    <h4 class="text-xl font-bold text-indigo-800 mb-4">Overall Performance Rating</h4>
+                    <p class="text-sm text-gray-600 mb-6">The grade below is automatically selected based on the calculated percentage.</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                        
+                        <!-- Grade A (Outstanding) -->
+                        <div class="flex flex-col items-center p-3 border rounded-lg transition-all duration-200" id="gradeA_box">
+                            <input type="radio" name="overallRating" id="ratingA" value="Outstanding" class="hidden">
+                            <label for="ratingA" class="cursor-pointer flex flex-col items-center w-full">
+                                <span class="text-4xl font-extrabold text-green-600">A</span>
+                                <span class="text-xs font-medium text-gray-600 mt-1">Outstanding (90%+)</span>
+                            </label>
+                        </div>
+                        <!-- Grade B (Exceeds Expectations) -->
+                        <div class="flex flex-col items-center p-3 border rounded-lg transition-all duration-200" id="gradeB_box">
+                            <input type="radio" name="overallRating" id="ratingB" value="Exceeds Expectations" class="hidden">
+                            <label for="ratingB" class="cursor-pointer flex flex-col items-center w-full">
+                                <span class="text-4xl font-extrabold text-blue-600">B</span>
+                                <span class="text-xs font-medium text-gray-600 mt-1">Exceeds Expectations (75% - 90%)</span>
+                            </label>
+                        </div>
+                        <!-- Grade C (Meets Expectations) -->
+                        <div class="flex flex-col items-center p-3 border rounded-lg transition-all duration-200" id="gradeC_box">
+                            <input type="radio" name="overallRating" id="ratingC" value="Meets Expectations" class="hidden">
+                            <label for="ratingC" class="cursor-pointer flex flex-col items-center w-full">
+                                <span class="text-4xl font-extrabold text-yellow-600">C</span>
+                                <span class="text-xs font-medium text-gray-600 mt-1">Meets Expectations (65% - 75%)</span>
+                            </label>
+                        </div>
+                        <!-- Grade D (Needs Improvement) -->
+                        <div class="flex flex-col items-center p-3 border rounded-lg transition-all duration-200" id="gradeD_box">
+                            <input type="radio" name="overallRating" id="ratingD" value="Needs Improvement" class="hidden">
+                            <label for="ratingD" class="cursor-pointer flex flex-col items-center w-full">
+                                <span class="text-4xl font-extrabold text-orange-600">D</span>
+                                <span class="text-xs font-medium text-gray-600 mt-1">Needs Improvement (50% - 65%)</span>
+                            </label>
+                        </div>
+                        <!-- Grade E (Unsatisfactory) -->
+                        <div class="flex flex-col items-center p-3 border rounded-lg transition-all duration-200" id="gradeE_box">
+                            <input type="radio" name="overallRating" id="ratingE" value="Unsatisfactory" class="hidden">
+                            <label for="ratingE" class="cursor-pointer flex flex-col items-center w-full">
+                                <span class="text-4xl font-extrabold text-red-600">E</span>
+                                <span class="text-xs font-medium text-gray-600 mt-1">Unsatisfactory (&le; 50%)</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Performance Review - Goals & Achievements -->
+            <section>
+                <h3 class="text-2xl font-bold text-gray-800 mb-6 border-l-4 border-indigo-500 pl-4">3. Goals & Achievements</h3>
+                <div class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="goalsAchieved" class="block text-sm font-semibold text-gray-600 mb-1">Goals Achieved During Review Period</label>
+                            <textarea id="goalsAchieved" rows="4" class="w-full rounded-lg border-gray-300 shadow-sm p-3 border focus:ring-indigo-500" placeholder="List and describe the primary goals achieved."></textarea>
+                        </div>
+                        <div>
+                            <label for="majorAccomplishments" class="block text-sm font-semibold text-gray-600 mb-1">Major Accomplishments / Areas of Strength</label>
+                            <textarea id="majorAccomplishments" rows="4" class="w-full rounded-lg border-gray-300 shadow-sm p-3 border focus:ring-indigo-500" placeholder="Highlight key successes and inherent strengths."></textarea>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="challengesFaced" class="block text-sm font-semibold text-gray-600 mb-1">Challenges Faced</label>
+                            <textarea id="challengesFaced" rows="4" class="w-full rounded-lg border-gray-300 shadow-sm p-3 border focus:ring-indigo-500" placeholder="Describe obstacles encountered and how they were handled."></textarea>
+                        </div>
+                        <div>
+                            <label for="areasForImprovement" class="block text-sm font-semibold text-gray-600 mb-1">Areas for Improvement</label>
+                            <textarea id="areasForImprovement" rows="4" class="w-full rounded-lg border-gray-300 shadow-sm p-3 border focus:ring-indigo-500" placeholder="Identify specific areas requiring development or attention."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Development Action Plan (Page Break starts here for print) -->
+            <section id="pagebreak">
+                <h3 class="text-2xl font-bold text-gray-800 mb-6 border-l-4 border-indigo-500 pl-4">4. Development Action Plan</h3>
+                
+                <div class="space-y-6">
+                    <p class="text-sm font-semibold text-gray-700">Goals & Objectives for Next Review Period (SMART Goals)</p>
+                    <input type="text" placeholder="Goal 1" class="w-full rounded-lg border-gray-300 shadow-sm p-3 border focus:ring-indigo-500">
+                    <input type="text" placeholder="Goal 2" class="w-full rounded-lg border-gray-300 shadow-sm p-3 border focus:ring-indigo-500">
+                    <input type="text" placeholder="Goal 3" class="w-full rounded-lg border-gray-300 shadow-sm p-3 border focus:ring-indigo-500">
+                    <input type="text" placeholder="Goal 4" class="w-full rounded-lg border-gray-300 shadow-sm p-3 border focus:ring-indigo-500">
+                    <input type="text" placeholder="Goal 5" class="w-full rounded-lg border-gray-300 shadow-sm p-3 border focus:ring-indigo-500">
+                </div>
+
+                <div class="mt-8 space-y-4">
+                    <div>
+                        <label for="trainingNeeds" class="block text-sm font-semibold text-gray-600 mb-1">Training Needs Identified</label>
+                        <textarea id="trainingNeeds" rows="3" class="w-full rounded-lg border-gray-300 shadow-sm p-3 border focus:ring-indigo-500" placeholder="Specific training, courses, or certifications required."></textarea>
+                    </div>
+                    <div>
+                        <label for="careerAspirations" class="block text-sm font-semibold text-gray-600 mb-1">Career Development Aspirations</label>
+                        <textarea id="careerAspirations" rows="3" class="w-full rounded-lg border-gray-300 shadow-sm p-3 border focus:ring-indigo-500" placeholder="Employee's long-term career goals."></textarea>
+                    </div>
+                    <div>
+                        <label for="supportNeeded" class="block text-sm font-semibold text-gray-600 mb-1">Support Needed from Management</label>
+                        <textarea id="supportNeeded" rows="3" class="w-full rounded-lg border-gray-300 shadow-sm p-3 border focus:ring-indigo-500" placeholder="Resources, mentorship, or policy changes required for success."></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Overall Comments Section -->
+            <section>
+                <h3 class="text-2xl font-bold text-gray-800 mb-6 border-l-4 border-indigo-500 pl-4">5. Final Comments</h3>
+                <div class="space-y-6">
+                    <div>
+                        <label for="employeeComments" class="block text-sm font-semibold text-gray-600 mb-1">Employee Comments / Self-Assessment</label>
+                        <textarea id="employeeComments" rows="4" class="w-full rounded-lg border-gray-300 shadow-sm p-3 border focus:ring-indigo-500" placeholder="Employee's perspective on their performance and the review process."></textarea>
+                    </div>
+                    <div>
+                        <label for="supervisorComments" class="block text-sm font-semibold text-gray-600 mb-1">Supervisor's Overall Comments</label>
+                        <textarea id="supervisorComments" rows="4" class="w-full rounded-lg border-gray-300 shadow-sm p-3 border focus:ring-indigo-500" placeholder="Supervisor's concluding remarks and summary."></textarea>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 6. Acknowledgment & Signatures Section -->
+            <section class="pt-8">
+                <h3 class="text-2xl font-bold text-gray-800 mb-6 border-l-4 border-indigo-500 pl-4">6. Acknowledgment & Signatures</h3>
+                <p class="text-sm text-gray-600 mb-8">By signing below, both parties acknowledge that this performance review has been discussed. Employee signature does not necessarily indicate agreement with the evaluation.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Employee Signature -->
+                    <div class="flex flex-col">
+                        <div class="border-t border-gray-300 pt-2 text-sm text-gray-700 font-medium">Employee Signature</div>
+                        <input type="text" class="w-full border-b border-dashed border-gray-400 p-1 mt-6 focus:border-indigo-500" placeholder="Print Name/Digital Signature">
+                        <div class="flex justify-between mt-1 text-xs text-gray-500">
+                            <span>Date: _________________</span>
+                        </div>
+                    </div>
+                    <!-- Supervisor Signature -->
+                    <div class="flex flex-col">
+                        <div class="border-t border-gray-300 pt-2 text-sm text-gray-700 font-medium">Supervisor Signature</div>
+                        <input type="text" class="w-full border-b border-dashed border-gray-400 p-1 mt-6 focus:border-indigo-500" placeholder="Print Name/Digital Signature">
+                        <div class="flex justify-between mt-1 text-xs text-gray-500">
+                            <span>Date: _________________</span>
+                        </div>
+                    </div>
+                    <!-- Department Head Signature -->
+                    <div class="flex flex-col">
+                        <div class="border-t border-gray-300 pt-2 text-sm text-gray-700 font-medium">Department Head Signature</div>
+                        <input type="text" class="w-full border-b border-dashed border-gray-400 p-1 mt-6 focus:border-indigo-500" placeholder="Print Name/Digital Signature">
+                        <div class="flex justify-between mt-1 text-xs text-gray-500">
+                            <span>Date: _________________</span>
+                        </div>
+                    </div>
+                    <!-- HR Manager Signature -->
+                    <div class="flex flex-col">
+                        <div class="border-t border-gray-300 pt-2 text-sm text-gray-700 font-medium">HR Manager Signature</div>
+                        <input type="text" class="w-full border-b border-dashed border-gray-400 p-1 mt-6 focus:border-indigo-500" placeholder="Print Name/Digital Signature">
+                        <div class="flex justify-between mt-1 text-xs text-gray-500">
+                            <span>Date: _________________</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 p-4 bg-yellow-50 border-l-4 border-yellow-400 rounded-lg text-sm text-yellow-800 print-hidden">
+                    <p class="font-bold mb-1">Employee Right to Respond</p>
+                    <p>If you disagree with any aspect of this evaluation, you have the right to submit a written response to HR within 10 business days of this review. Your response will be attached to this evaluation and placed in your personnel file.</p>
+                </div>
+            </section>
+
+
+            <!-- Submit Button (Hidden in Print Mode) -->
+            <div class="pt-6 print-hidden">
+                <button type="submit" class="w-full px-6 py-4 bg-indigo-600 text-white font-extrabold rounded-xl shadow-lg hover:bg-indigo-700 transition-all duration-300 transform hover:scale-[1.005] focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50">
+                    FINALIZE AND SUBMIT EVALUATION
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- UPDATED PERFORMANCE FACTORS (Matching User's 6 Sections) ---
+            const factorCategories = [
+                { id: 'job-knowledge', category: "1. Job Knowledge & Skills", maxPoints: 20, items: [
+                    "Technical Knowledge & Competency", 
+                    "Job-Specific Skills", 
+                    "Industry/Domain Knowledge", 
+                    "Continuous Learning & Development"
+                ] },
+                { id: 'quality-productivity', category: "2. Work Quality & Productivity", maxPoints: 25, items: [
+                    "Quality of Work Output", 
+                    "Accuracy & Thoroughness", 
+                    "Productivity & Output Volume", 
+                    "Efficiency & Time Management", 
+                    "Attention to Detail"
+                ] },
+                { id: 'communication-teamwork', category: "3. Communication & Teamwork", maxPoints: 20, items: [
+                    "Verbal Communication Skills", 
+                    "Written Communication Skills", 
+                    "Teamwork & Collaboration", 
+                    "Interpersonal Relations"
+                ] },
+                { id: 'initiative-problem-solving', category: "4. Initiative & Problem Solving", maxPoints: 20, items: [
+                    "Initiative & Proactivity", 
+                    "Problem Solving Ability", 
+                    "Creativity & Innovation", 
+                    "Adaptability & Flexibility"
+                ] },
+                { id: 'reliability-professionalism', category: "5. Reliability & Professionalism", maxPoints: 25, items: [
+                    "Attendance Record", 
+                    "Punctuality", 
+                    "Dependability & Reliability", 
+                    "Professional Conduct", 
+                    "Work Ethics & Integrity"
+                ] },
+                { id: 'leadership-management', category: "6. Leadership & Management (If Applicable)", maxPoints: 20, items: [
+                    "Leadership Skills", 
+                    "Delegation & Task Management", 
+                    "Mentoring & Staff Development", 
+                    "Conflict Resolution"
+                ] },
+            ];
+
+            // Calculate the overall maximum score (26 items * 5 points = 130)
+            const overallMaxScore = factorCategories.reduce((total, cat) => total + cat.maxPoints, 0);
+
+            // Display the overall max score in the footer
+            document.getElementById('maxScoreDisplay').textContent = `0 out of ${overallMaxScore} points`;
+
+            const tableBody = document.getElementById('ratingTableBody');
+            let rowId = 0; // Unique ID for each rating group
+            
+            // 3. Function to generate table rows and attach event listeners
+            function generateTableRows() {
+                tableBody.innerHTML = '';
+                
+                factorCategories.forEach(section => {
+                    // Category Header Row
+                    const headerRow = document.createElement('tr');
+                    headerRow.innerHTML = `
+                        <td colspan="7" class="bg-indigo-50/70 px-4 py-3 text-sm font-extrabold text-indigo-700 sticky top-[60px] shadow-sm">
+                            <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+                                <span>${section.category}</span>
+                                <span id="score-display-${section.id}" class="text-xs font-extrabold text-indigo-800 bg-white px-3 py-1 rounded-full shadow-md transition-all duration-300 ring-1 ring-indigo-200 mt-1 md:mt-0">
+                                    Score: 0 / ${section.maxPoints} (0.00%)
+                                </span>
+                            </div>
+                        </td>
+                    `;
+                    tableBody.appendChild(headerRow);
+                    
+                    section.items.forEach(item => {
+                        createItemRow(item, section.id);
+                    });
+                });
+            }
+
+            function createItemRow(item, categoryId) {
+                const itemRow = document.createElement('tr');
+                rowId++;
+                const name = 'rating-' + rowId;
+                
+                let ratingHtml = `
+                    <td class="px-4 py-3 text-sm font-medium text-gray-700">${item}</td>
+                `;
+                
+                // Generate 5 radio button columns (1 to 5)
+                for (let i = 1; i <= 5; i++) {
+                    ratingHtml += `
+                        <td class="px-1 py-3 whitespace-nowrap text-center">
+                            <input type="radio" name="${name}" value="${i}" class="rating-radio" data-category-id="${categoryId}">
+                        </td>
+                    `;
+                }
+
+                // Add the Observation Textarea
+                ratingHtml += `
+                    <td class="px-6 py-3">
+                        <textarea rows="1" class="w-full resize-none border-gray-300 rounded-md shadow-inner text-sm focus:ring-indigo-500 p-2 border transition-colors duration-200" placeholder="Notes..."></textarea>
+                    </td>
+                `;
+                
+                itemRow.innerHTML = ratingHtml;
+                tableBody.appendChild(itemRow);
+            }
+
+            // 4. Function to calculate the overall percentage and category scores
+            function calculateOverallScore() {
+                let grandTotalScore = 0;
+                let grandTotalRatedItems = 0;
+
+                // Object to store current category ratings: { categoryId: { currentScore: 0, ratedItems: 0, maxPoints: X } }
+                const categoryScores = factorCategories.reduce((acc, cat) => {
+                    acc[cat.id] = { currentScore: 0, ratedItems: 0, maxPoints: cat.maxPoints };
+                    return acc;
+                }, {});
+
+                // Iterate over all checked radio buttons
+                const checkedRatings = document.querySelectorAll('input[type="radio"].rating-radio:checked');
+
+                checkedRatings.forEach(radio => {
+                    const ratingValue = parseInt(radio.value, 10);
+                    const categoryId = radio.getAttribute('data-category-id');
+
+                    if (categoryId && categoryScores[categoryId]) {
+                        categoryScores[categoryId].currentScore += ratingValue;
+                        categoryScores[categoryId].ratedItems += 1;
+                        
+                        grandTotalScore += ratingValue;
+                        grandTotalRatedItems += 1;
+                    }
+                });
+
+                // Update category score displays
+                factorCategories.forEach(cat => {
+                    const data = categoryScores[cat.id];
+                    const maxPossiblePoints = data.maxPoints; // Max possible for the category
+                    const currentRatedMax = data.ratedItems * 5; // Max score for items *rated* so far in this category
+                    
+                    let percentage = 0;
+                    // Calculate percentage only if items have been rated
+                    if (data.ratedItems > 0) {
+                        percentage = (data.currentScore / currentRatedMax) * 100;
+                    }
+                    
+                    const scoreDisplay = document.getElementById(`score-display-${cat.id}`);
+                    if (scoreDisplay) {
+                        scoreDisplay.textContent = `Score: ${data.currentScore} / ${maxPossiblePoints} (${percentage.toFixed(2)}%)`;
+                    }
+                });
+
+                // Update overall score display
+                let overallPercentage = 0;
+                let currentRatedScore = 0;
+
+                if (grandTotalRatedItems > 0) {
+                    // Overall percentage is calculated against the maximum score possible for ALL rated items (grandTotalRatedItems * 5)
+                    const grandTotalRatedMax = grandTotalRatedItems * 5;
+                    overallPercentage = (grandTotalScore / grandTotalRatedMax) * 100;
+                    currentRatedScore = grandTotalScore;
+                }
+                
+                // Update the overall total score display
+                document.getElementById('maxScoreDisplay').textContent = `${currentRatedScore} out of ${overallMaxScore} points`;
+                
+                const scoreElement = document.getElementById('calculatedScore');
+                scoreElement.textContent = `${overallPercentage.toFixed(2)}%`;
+                
+                // Highlight the corresponding Overall Grade radio button
+                highlightOverallGrade(overallPercentage);
+            }
+            
+            // Function to automatically check the relevant overall grade based on the percentage
+            function highlightOverallGrade(percentage) {
+                // Remove existing highlight styles
+                document.querySelectorAll('[id$="_box"]').forEach(box => {
+                    box.classList.remove('bg-indigo-100', 'border-indigo-500', 'shadow-lg');
+                    box.classList.add('border-gray-200'); // Ensure it returns to standard border
+                });
+
+                // Determine the correct grade
+                let gradeId = '';
+                if (percentage >= 90) {
+                    gradeId = 'ratingA';
+                } else if (percentage >= 75) {
+                    gradeId = 'ratingB';
+                } else if (percentage >= 65) {
+                    gradeId = 'ratingC';
+                } else if (percentage >= 50) {
+                    gradeId = 'ratingD';
+                } else if (percentage > 0) {
+                    gradeId = 'ratingE';
+                } else {
+                     // No rating selected, ensure all radio buttons are unchecked
+                     document.querySelectorAll('input[name="overallRating"]').forEach(radio => radio.checked = false);
+                     return;
+                }
+                
+                // Check the calculated radio button
+                const gradeRadio = document.getElementById(gradeId);
+                if (gradeRadio) {
+                    gradeRadio.checked = true;
+                    // Apply highlight style
+                    const gradeBox = document.getElementById(gradeId.replace('rating', 'grade') + '_box');
+                    if (gradeBox) {
+                        gradeBox.classList.remove('border-gray-200');
+                        gradeBox.classList.add('bg-indigo-100', 'border-indigo-500', 'shadow-lg');
+                    }
+                }
+            }
+
+
+            // 5. Initial generation and event setup
+            generateTableRows();
+
+            // Add change listener to all dynamically generated rating radio buttons
+            document.querySelectorAll('input[type="radio"].rating-radio').forEach(radio => {
+                radio.addEventListener('change', calculateOverallScore);
+            });
+
+            // Calculate initial score (should be 0.00%)
+            calculateOverallScore();
+        });
+    </script>
+
+</body>
+</html>
